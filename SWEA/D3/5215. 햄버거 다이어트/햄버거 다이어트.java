@@ -1,10 +1,12 @@
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Solution {
+// 조합으로 칼로리 수가 제한 칼로리보다 작은 모든 경우의 수를 구하고,
+// 점수의 최대값을 갱신한다.
+
+public class Solution{
 	private static int[][] arr;
 	private static int N;
 	private static int L;
@@ -15,8 +17,6 @@ public class Solution {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = null;
 		int T = Integer.parseInt(br.readLine()); // Test Case
-		
-		
 		
 		for(int tc=1; tc<=T; tc++) {
 			ans = 0;
@@ -40,15 +40,13 @@ public class Solution {
 		}
 	}
 		public static void combination(int startIndex, int scores, int calories) {
-			if(calories <= L) {
-				ans=Math.max(scores, ans);
+			if(calories <= L) { // 칼로리의 합이 최대 칼로리보다 작으면
+				ans=Math.max(scores, ans); // 최대값 갱신
 			}
-			for(int i=startIndex; i<N; i++) {
+			for(int i=startIndex; i<N; i++) { // startIndex부터 차례대로 더하기
 				int calorie = calories+ arr[i][1];
-				int score = scores+ arr[i][0];		
-				//System.out.println(i+1 + ", "+score + ", " + calorie);				
+				int score = scores+ arr[i][0];						
 				combination(i+1, score, calorie);
-
 			}
 	}
 }
