@@ -3,67 +3,91 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.StringTokenizer;
 
 public class Solution {
-	private static int[][] arr;
-	private static boolean[] isSelected;
-	private static int N;
-	private static int L;
-	private static int ans;
-	public static void main(String[] args) throws Exception {
-		 //System.setIn(new FileInputStream("res/d0816/input_SWEA_5215"));
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = null;
-		int T = Integer.parseInt(br.readLine());
-		for(int tc=1; tc<=T; tc++) {
-			ans = 0;
-			st = new StringTokenizer(br.readLine());
-			N = Integer.parseInt(st.nextToken()); // 재료의 수
-			L = Integer.parseInt(st.nextToken()); // 제한 칼로리
-			
-			arr = new int[N][2];
-			for(int i=0; i<N; i++) {
-				st = new StringTokenizer(br.readLine());
-				int score = Integer.parseInt(st.nextToken());
-				int calorie = Integer.parseInt(st.nextToken());
-				arr[i][0] = score; // 점수
-				arr[i][1] = calorie; // 칼로리
-			}
-			
-			//combination(0, 0, 0);
-			powerSet(0,0, 0, new boolean[N]);
-			System.out.printf("#%d %d",tc,ans);
-			System.out.println("");
-			
-		}
-	}
-	
-		public static void combination(int startIndex, int scores, int calories) { // 조합
-			if(calories <= L) { // 칼로리의 합이 최대 칼로리보다 작으면
-				ans=Math.max(scores, ans); // 최대값 갱신
-			}
-			for(int i=startIndex; i<N; i++) { // startIndex부터 차례대로 더하기						
-				combination(i+1, scores+arr[i][0], calories+arr[i][1]);
-			}
-		}
-		
-		public static void powerSet(int cnt, int scores, int calories, boolean[] isSelected) { // 부분집합
-			if (calories <= L) { //최대 칼로리보다 작을 때
-				ans=Math.max(scores, ans);
-				
-			}
-			if(cnt == N) { // 모든 재료의 수를 다 썼으면
-				return;
-			}
-			else {
-				//System.out.println(Arrays.toString(isSelected));
-				isSelected[cnt] = true;
-				powerSet(cnt+1,  scores+arr[cnt][0], calories+arr[cnt][1], isSelected);
-				isSelected[cnt] = false;
-				powerSet(cnt+1, scores, calories, isSelected);
-				
-				
-			}
-		}
+    static int N;
+    static int L;
+    static int[][] arr;
+    static int maxScore;
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine());
+
+        for (int t = 1; t <= T; t++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            N = Integer.parseInt(st.nextToken());
+            L = Integer.parseInt(st.nextToken());
+
+            arr = new int[N][2];
+            for (int i = 0; i < N; i++) {
+                st = new StringTokenizer(br.readLine());
+                arr[i][0] = Integer.parseInt(st.nextToken()); // 점수
+                arr[i][1] = Integer.parseInt(st.nextToken()); // 칼로리
+            }
+
+            maxScore = 0;
+
+            for (int i = 1; i <= N; i++) { // 1 -> 하나를 뽑는 조합, 2 -> 둘을 뽑는 조합 ..
+                combination(i);
+            }
+            System.out.println("#" + t + " " + maxScore);
+        }
+    }
+    
+    // swap
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    
+    // nextPermutation
+    private static boolean nextPermutation(int[] p) {
+
+        int i = N - 1; // 꼭대기
+        while (i > 0 && p[i - 1] >= p[i]) i--;
+
+        if (i == 0) return false;
+
+        int j = N - 1; // 꼭대기 앞의 수와 바꿀 수
+        while (p[i - 1] >= p[j]) j--;
+
+        swap(p, i - 1, j);
+
+        int k = N - 1;
+        while (i < k) { // 꼭대기부터 끝까지 오름차순 정렬
+            swap(p, i++, k--);
+        }
+
+        return true;
+    }
+
+    // combination
+    private static void combination(int num) {
+        int[] p = new int[N];
+        // 뒤에서부터 num개를 1으로 변경
+        // N이 5이고 p가 3이면, [0, 0, 1, 1, 1]
+        for (int i = N - 1; i >= N - num; i--) { // 뒤에서부터 num개를 1으로 변경
+            p[i] = 1;
+        }
+        Arrays.fill(p, 0, N - num, 0); // 0부터 N-num개를 0으로 변경
+
+        do {
+            int score = 0;
+            int cal = 0;
+            for (int i = 0; i < N; i++) {
+                if (p[i] == 1) { // 뽑았으면
+                    cal += arr[i][1];
+                    if (cal > L) break;
+                    score += arr[i][0];
+                }
+            }
+            if (cal <= L) {
+                maxScore = Math.max(score, maxScore);
+            }
+        } while (nextPermutation(p));
+    }
 }
