@@ -34,7 +34,7 @@ public class Solution {
 			int maxHouseCount = 0;
 			for(int i=0; i<N; i++) {
 				for(int j=0; j<N; j++) {
-					for(int k=1; k<=100; k++) {
+					for(int k=1; k<=N+1; k++) {
 						visited = new boolean[N][N];
 						int houseCount = calculateHouse2(i, j, k);
 						if(houseCount == 0) {
@@ -49,43 +49,42 @@ public class Solution {
 			}
 			System.out.println("#"+tc+" "+maxHouseCount);		
 		}
-		
 	}
 
-	// (x, y)에서 bfs를 통해 k개 만큼 탐색하여 집의 개수를 센다.
-	public static int calculateHouse(int x, int y, int k) {
-		int houseCount = map[x][y] == 1 ? 1 : 0;
-		Queue<int[]> queue = new LinkedList<>();
-		queue.add(new int[] { x, y, 1 });
-		visited[x][y] = true;
-
-		while (!queue.isEmpty()) {
-			int[] curr = queue.poll();
-			int cx = curr[0];
-			int cy = curr[1];
-			int ck = curr[2];
-
-			if (ck >= k) {
-				break;
-			}
-
-			for (int d = 0; d < 4; d++) {
-				int nx = cx + dx[d];
-				int ny = cy + dy[d];
-
-				// 범위 안에 있고, 방문안했으며, 집이면
-				if (isInBound(nx, ny) && !visited[nx][ny]) {
-					visited[nx][ny] = true;
-					queue.add(new int[] { nx, ny, ck + 1 });
-					if (map[nx][ny] == 1) {
-						houseCount++;
-					}
-				}
-			}
-		}
-
-		return houseCount;
-	}
+//	// (x, y)에서 bfs를 통해 k개 만큼 탐색하여 집의 개수를 센다.
+//	public static int calculateHouse(int x, int y, int k) {
+//		int houseCount = map[x][y] == 1 ? 1 : 0;
+//		Queue<int[]> queue = new LinkedList<>();
+//		queue.add(new int[] { x, y, 1 });
+//		visited[x][y] = true;
+//
+//		while (!queue.isEmpty()) {
+//			int[] curr = queue.poll();
+//			int cx = curr[0];
+//			int cy = curr[1];
+//			int ck = curr[2];
+//
+//			if (ck >= k) {
+//				break;
+//			}
+//
+//			for (int d = 0; d < 4; d++) {
+//				int nx = cx + dx[d];
+//				int ny = cy + dy[d];
+//
+//				// 범위 안에 있고, 방문안했으며, 집이면
+//				if (isInBound(nx, ny) && !visited[nx][ny]) {
+//					visited[nx][ny] = true;
+//					queue.add(new int[] { nx, ny, ck + 1 });
+//					if (map[nx][ny] == 1) {
+//						houseCount++;
+//					}
+//				}
+//			}
+//		}
+//
+//		return houseCount;
+//	}
 	public static int calculateHouse2(int x, int y, int k) {
 		int houseCount = 0;
 		
