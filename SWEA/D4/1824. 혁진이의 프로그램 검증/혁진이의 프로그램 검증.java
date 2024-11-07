@@ -22,7 +22,7 @@ public class Solution {
 			}
 
 			sb.append("#").append(tc).append(" ");
-			if(solve(R, C, command)) {
+			if(canStop(R, C, command)) {
 				sb.append("YES").append("\n");
 			}else{
 				sb.append("NO").append("\n");
@@ -31,6 +31,7 @@ public class Solution {
 		System.out.println(sb);
 	}
 
+	// 방향 얻기
 	public static int getDirection(char c, int d, int m) {
 		switch (c) {
 		case '<':
@@ -45,11 +46,12 @@ public class Solution {
 			return (m == 0 ? 0 : 2);
 		case '|':
 			return (m == 0 ? 1 : 3);
-		default:
+		default: // 그 외의 것은 방향 전환 없음
 			return d;
 		}
 	}
 	
+	// 메모리 값 갱신
 	public static int changeM(char c, int m) {
 		if(0<= c-'0' && c-'0' <= 9) {
 			return c-'0';
@@ -62,11 +64,11 @@ public class Solution {
 	}
 	
 	
-	public static boolean solve(int R, int C, char[][] command) {
+	public static boolean canStop(int R, int C, char[][] command) {
 		Queue<int[]> q = new LinkedList<>();
 		boolean[][][][] visited = new boolean[R][C][4][16];
 		
-		
+		// 방향과 메모리의 값에 따라 방문 여부 따져야 함
 		visited[0][0][0][0] = true;
 
 		q.add(new int[] {0,0,0,0}); // x, y, 방향, m
@@ -82,12 +84,14 @@ public class Solution {
 			if(currentCommand == '@')
 				return true;
 			
-			
+			// 방향과 메모리 갱신
 			cd = getDirection(currentCommand, cd, cm);
 			cm = changeM(currentCommand, cm);
 			
+			// ?인 경우 네 방향 모두 큐에 추가
 			if (currentCommand == '?') {
 				for(int dir : directions) {
+					// 크기 넘으면 다시 처음으로
 					int nx = (cx + dx[dir] + R) % R;
 					int ny = (cy + dy[dir] + C) % C;
 					
