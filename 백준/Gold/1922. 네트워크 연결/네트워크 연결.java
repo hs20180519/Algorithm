@@ -57,10 +57,8 @@ public class Main {
 		int xParent = find(x);
 		int yParent = find(y);
 		
-		if(xParent > yParent) {
+		if(xParent != yParent) {
 			parents[yParent] = xParent;
-		}else {
-			parents[xParent] = yParent;
 		}
 	}
 }
