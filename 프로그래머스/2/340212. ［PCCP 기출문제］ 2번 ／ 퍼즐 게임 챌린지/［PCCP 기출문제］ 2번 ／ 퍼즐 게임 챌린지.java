@@ -1,7 +1,6 @@
 class Solution {
-    static int answer;
     public int solution(int[] diffs, int[] times, long limit) {
-        answer = 0;
+        int answer = 0;
         
         // 숙련도의 최솟값
         // 이진 탐색
@@ -32,7 +31,6 @@ class Solution {
                 t += (diffs[i] - level) * (times[i]+times[i-1]) + times[i];
             }
         }
-        if(t <= limit) return true;
-        else return false;
+        return t <= limit;
     }
 }
