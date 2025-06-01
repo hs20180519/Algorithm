@@ -1,36 +1,38 @@
 class Solution {
+    static int answer;
     public int solution(int[] diffs, int[] times, long limit) {
-        int left = 1;
-        int right = 100_000;
-        int answer = right;
+        answer = 0;
         
-        while (left <= right){
-            int mid = (left + right)/2;
-            
-            if(isPossible(mid, diffs, times, limit)){
+        // 숙련도의 최솟값
+        // 이진 탐색
+        
+        int start = 0;
+        int end = 100000;
+        while(start <= end){
+            int mid = (start + end)/2; // 레벨
+            if(calc(diffs, times, limit, mid)){ // 가능하면 더 줄이기
+                end = mid-1;
                 answer = mid;
-                right = mid-1;
             }else{
-                left = mid+1;
+                start = mid+1;
             }
         }
+        
         return answer;
     }
-    public boolean isPossible(int level, int[] diffs, int[] times, long limit){
-        long totalTime = 0;
-        
-        for(int i=0; i < diffs.length; i++){
-            int diff = diffs[i];
-            int time_cur = times[i];
-            int time_prev = (i>0) ? times[i-1] : 0;
     
-            if(diff<=level) totalTime += time_cur;
-            else{
-                long retryCount = diff - level;
-                totalTime += (long)(time_cur + time_prev) * retryCount + time_cur;
-                if(totalTime > limit) return false;
+    // 현재 레벨에 따라 제한 시간 내에 퍼즐을 해결할 수 있는지
+    public boolean calc(int[] diffs, int[] times, long limit, long level){
+        long t = 0;
+        for(int i=0; i<diffs.length; i++){
+            if(diffs[i] <= level){
+                t += times[i];
+            }else{
+                if (i<1) return false;
+                t += (diffs[i] - level) * (times[i]+times[i-1]) + times[i];
             }
         }
-        return totalTime <= limit;
+        if(t <= limit) return true;
+        else return false;
     }
 }
