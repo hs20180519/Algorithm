@@ -1,81 +1,80 @@
 import java.util.*;
-class Point{
-    int landNumber;
+import java.io.*;
+
+class A {
     int landSize;
+    int landNumber;
     
-    public Point(int landNumber, int landSize){
-        this.landNumber = landNumber;
+    A(int landSize, int landNumber){
         this.landSize = landSize;
+        this.landNumber = landNumber;
     }
+    
+    
 }
+
 
 class Solution {
     int[] dx = {-1, 1, 0, 0};
     int[] dy = {0, 0, -1, 1};
-    boolean[][] visited;
-    Point[][] newLand;
-    
     public int solution(int[][] land) {
-        int r = land.length;
-        int c = land[0].length;
-        visited = new boolean[r][c];
-        this.newLand = new Point[r][c];
-        // 1. 맵에 bfs를 돌려서 각각의 (땅 번호와 석유덩어리 크기)를 저장함
-    
-        int number = 1;
-        for(int i=0; i<r; i++){
-            for(int j=0; j<c; j++){
-                if(land[i][j] == 1 && !visited[i][j]){
-                    bfs(land, i, j, number++);
+        A[][] map = new A[land.length][land[0].length];
+        boolean[][] visited = new boolean[land.length][land[0].length];
+        
+        int landNum = 1;
+        for(int i=0; i<land.length; i++){
+            for(int j=0; j<land[0].length; j++){
+                if(land[i][j]==1 && !visited[i][j]){
+                    List<int[]> arr = bfs(land, map, i, j, visited);
+        
+                    for(int[] a : arr){
+                        map[a[0]][a[1]] = new A(arr.size(), landNum);
+                    }
+                    landNum++;
                 }
             }
         }
-        int answer = 0;
-        for(int i=0; i<c; i++){
-            Set<Integer> s = new HashSet<>();
-            int tempSum = 0;
-            for(int j=0; j<r; j++){
-                Point p = newLand[j][i];
-                if (p != null && !s.contains(p.landNumber)) {
-                    s.add(p.landNumber);
-                    tempSum += p.landSize;
+        int f = 0;
+        for(int i=0; i<land[0].length; i++){
+            Map<Integer, Integer> s = new HashMap<>();
+            int answer = 0;
+            for(int j=0; j<land.length; j++){
+                if(land[j][i] == 1){
+                    A m = map[j][i];
+                    s.put(m.landNumber, m.landSize);    
                 }
             }
-            answer = Math.max(tempSum, answer);
-          
+            for(int size : s.values()){
+                answer+= size;
+            }
+            f = Math.max(answer, f);
         }
-  
-        return answer;
+
+        return f;
     }
-    
-    public void bfs(int[][] land, int x, int y, int number){
+    public List<int[]> bfs(int[][] land, A[][] map, int x, int y, boolean[][] visited){
         Queue<int[]> q = new LinkedList<>();
+        List<int[]> arr = new ArrayList<>(); // 방문한 위치 배열
         q.add(new int[]{x, y});
+        arr.add(new int[]{x,y});
         visited[x][y] = true;
-        int count = 1;
-        
-        List<int[]> path = new ArrayList<>();
-        path.add(new int[]{x,y});
-        
         while(!q.isEmpty()){
-            int[] c = q.poll();
-            int cx = c[0];
-            int cy = c[1];
-            for(int d =0; d<4; d++){
+            int[] curr = q.poll();
+            int cx = curr[0];
+            int cy = curr[1];
+            for(int d=0; d<4; d++){
                 int nx = cx + dx[d];
                 int ny = cy + dy[d];
-                
-                if(0<=nx && nx<land.length && 0<=ny && ny <land[0].length && !visited[nx][ny] && land[nx][ny] == 1){
-                    count++;
-                    q.add(new int[]{nx, ny});
+                if(isIn(nx, ny, land) && land[nx][ny] == 1 && visited[nx][ny] == false){
                     visited[nx][ny] = true;
-                    path.add(new int[]{nx,ny});
+                    q.add(new int[]{nx, ny});
+                    arr.add(new int[]{nx,ny});
                 }
             }
         }
-        
-        for(int[] p : path){
-            newLand[p[0]][p[1]] = new Point(number, count);
-        }
+        return arr;
+    }
+    public boolean isIn(int x, int y, int[][] land){
+        return 0<= x && x<land.length && 0<= y && y < land[0].length;
     }
 }
