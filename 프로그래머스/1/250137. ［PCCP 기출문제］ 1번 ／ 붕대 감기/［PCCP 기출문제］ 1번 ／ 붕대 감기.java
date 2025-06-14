@@ -1,33 +1,33 @@
 class Solution {
     public int solution(int[] bandage, int health, int[][] attacks) {
-        // 시전 시간, 1초당 회복량, 추가 회복량
-        // 3 2 7
-        // 
-        int time = 1;
-        int continues = 0;
-        int currHealth = health;
+        int h = health; // 현재 체력
+        int ctime = 0; // 현재 시간
+        int contin = 0; // 연속횟수
+
+        int index = 0;
         
-        int at = 0;
-        while(at != attacks.length){ // 0
-            if(time == attacks[at][0]){ // 
-                currHealth -= attacks[at][1];
-                continues = 0;
-                time++;
-                if(currHealth <= 0) return -1; // 플레이어 죽음
-                    at++;
+        while(index < attacks.length){
+            if(attacks[index][0] == ctime){ // 곻격하면
+                h-=attacks[index][1];
+                contin = 0;
+                index++;
             }else{
-                continues++;
-                if(continues >= bandage[0]){
-                    currHealth += bandage[2]; // 추가 회복량
-                    continues = 0;
-                }
-                currHealth += bandage[1]; // 1초당 회복량
-                if(currHealth > health) currHealth = health; // 최대 체력 이상 회복 X
-                // System.out.println("현재 시간: " + time + "체력: " + currHealth);
-                time++;
+                contin += 1;
+                h = h+bandage[1] < health ? h+bandage[1] : health; // 체력 회복 (<최대 체력)
             }
+            
+            if (h<=0){ // 죽음
+                h = -1;
+                break;
+            }
+            if (contin == bandage[0]){ // t초 연속으로 붕대 감기 성공하면
+                h = h+bandage[2] < health ? h+bandage[2] : health; // 추가 체력 회복 (<최대 체력)
+                contin = 0;
+            }
+            ctime++; // 시간 증가
+           
         }
-        
-        return currHealth;
+            
+        return h;
     }
 }
