@@ -1,22 +1,24 @@
 import java.util.*;
-
 class Solution {
     public String solution(String[] participant, String[] completion) {
-        Map<String, Integer> m = new HashMap<>();
-        for(int i=0; i<participant.length; i++){
-            m.put(participant[i], m.getOrDefault(participant[i], 0) + 1);
+        String answer = "";
+        // map 만들어서 각 이름마다 count +1
+        // completion 돌면서 count-1
+        // 마지막에 남아있는 이름이 답
+        HashMap<String, Integer> map = new HashMap<>();
+        for(String p : participant){
+            map.put(p, map.getOrDefault(p, 0)+1);
         }
-        
-        for(int i=0; i<completion.length; i++){
-            m.put(completion[i], m.get(completion[i])-1);
+    
+        for(String c : completion){
+            map.put(c, map.getOrDefault(c, 0)-1);
         }
-        
-        for(String name : m.keySet()){
-            if(m.get(name) == 1){
-                return name;
+        for(String s : map.keySet()){
+            if(map.get(s) == 1){
+                return s;
             }
         }
-
-        return "";
+        
+        return answer;
     }
 }
