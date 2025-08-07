@@ -1,43 +1,39 @@
 import java.util.*;
 
 class Solution {
-    static int ans = 0;
+    int ans = 0;
     public int solution(int k, int[][] dungeons) {
-        int len = dungeons.length;
-        cases(dungeons, k, 0, len, new int[len], new boolean[len]);
+        // 순열
+        // System.out.println(Arrays.toString(dungeons));
+        int n = dungeons.length;
+        perm(0, new int[n], k, dungeons, new boolean[n]);
         return ans;
     }
     
-    public void cases(int[][] dungeons, int k, int cnt, int len, int[] temp, boolean[] visited){
-        if(cnt == len){
-            // 탐험
-            int tamhum = 0;
-            int currentK = k;
-            for(int i=0; i<len; i++){
-                int index = temp[i];
-                
-                if(dungeons[index][0] <= currentK){ // 최소 필요 피로도가 현재 피로도보다 작으면
-                    tamhum++;
-                    currentK -= dungeons[index][1];
-                } else{
-                    break;
-                }
-            }
-            
-            ans = Integer.max(tamhum, ans);
+    public void perm(int depth, int[] temp, int k, int[][] dungeons, boolean[] visited){
+        if(depth==dungeons.length){ // 다 골랐으면
+            // System.out.println(Arrays.toString(temp));
+            ans = Math.max(ans, calc(k, dungeons, temp));
             return;
         }
-        
-        // 순열(중복 X)
-        for(int i=0; i<len; i++){
-            temp[cnt] = i;
+        for(int i=0; i<dungeons.length; i++){
             if(!visited[i]){
                 visited[i] = true;
-                cases(dungeons, k, cnt+1, len, temp, visited);
+                temp[depth] = i;
+                perm(depth+1, temp, k, dungeons, visited);
                 visited[i] = false;
             }
         }
-        
     }
-      
+    
+    public int calc(int k, int[][] dungeons, int[] temp){
+        int answer = 0;
+        for(int i=0; i<dungeons.length; i++){
+            if(k >= dungeons[temp[i]][0]){
+                k -= dungeons[temp[i]][1];
+                answer++;
+            }
+        }
+        return answer;
+    }
 }
