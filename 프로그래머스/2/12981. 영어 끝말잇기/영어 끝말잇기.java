@@ -1,32 +1,32 @@
 import java.util.*;
-
 class Solution {
     public int[] solution(int n, String[] words) {
-        int[] answers = new int[2];
-        HashSet<String> hset = new HashSet<String>();
-        // 가장 먼저 탈락하는 사람의 번호, 몇 번째 차례에 탈락하는 지
-        int number = 0;
-        int count = 0;
-        for(int i=0; i<words.length; i++){
-           
-            if(i!=0 && words[i-1].charAt(words[i-1].length()-1) != words[i].charAt(0)){
-                count = i%n + 1;
-                number = i/n + 1;
-                break;
-            }
-            
-            if(hset.contains(words[i])){
-                System.out.println(i+ " " + words[i]);
-                count = i%n + 1;
-                number = i/n + 1;
-                break;
-            }else{
-                hset.add(words[i]);
+        int[] answer = {};
+        HashSet<String> hset = new HashSet<>();
+        int len = words.length;
+        
+        String[][] endGame = new String[n][len/n];
+        
+        int idx = 0;
+        for(int j=0; j<len/n; j++){ // 3
+            for(int i=0; i<n; i++){ // 5
+                // 이미 있는 단어거나, 전에 한 문자인 경우
+                
+                if( hset.contains(words[idx]) || (idx > 0) &&
+                  !(words[idx].startsWith(Character.toString(words[idx-1].charAt(words[idx-1].length()-1))))){
+                    // i번째 사람의 j번째
+                    return new int[]{i+1, j+1};
+                
+                }else{
+                    hset.add(words[idx]);
+                    endGame[i][j] = words[idx++];
+                }
             }
         }
-     
-        answers[0] = count;
-        answers[1] = number;
-        return answers;
+        
+        
+        System.out.println(Arrays.deepToString(endGame));
+
+        return new int[]{0, 0};
     }
 }
