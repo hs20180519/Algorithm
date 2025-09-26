@@ -1,28 +1,23 @@
 import java.util.*;
-
 class Solution {
     boolean solution(String s) {
-        Stack <Character> stack = new Stack<>();
-        
-        // 배열을 돌며 "(" 면 stack에 추가
-        // ")" 면 "(" pop. -> pop할 것이 없거나(비어있는 스택) (이 없으면 false return
-      
-        if (s.length() % 2 == 1){
-            return false;
-        }
-        
-        for(char c : s.toCharArray()){
-            if ( c == '('){
+        boolean answer = true;
+
+        // [실행] 버튼을 누르면 출력 값을 볼 수 있습니다.
+        Stack<Character> stack = new Stack<>();
+        for(char c: s.toCharArray()){
+            if(!stack.isEmpty() && c == ')' && stack.peek() == '('){
+                
+               stack.pop();
+            }else{
                 stack.push(c);
-            }else if(c==')'){
-                // 스택이 비어 있으면 올바른 괄호 쌍이 없음
-                if (stack.isEmpty()){
-                    return false;
-                }
-                stack.pop(); // 괄호 쌍을 맞췄으므로 스택에서 제거
             }
+        
+          
+             // System.out.println(stack);
         }
-         
-        return stack.isEmpty();
+        
+
+        return stack.isEmpty()? true: false;
     }
 }
