@@ -1,38 +1,62 @@
 import java.util.*;
-import java.io.*;
 class Solution {
-    
-    Set<Integer> hset = new HashSet<Integer>();
-    boolean[] visited;
-    public int solution(String numbers) {
-        visited = new boolean[numbers.length()];
-        dfs("", numbers);
+    int len;
+    int answer;
+    int[] numbers;
+    HashSet<Integer> hset;
+    public int solution(String number) {
+        answer = 0;
+        len = number.length();
         
-        int answer = 0;
-        for(int num : hset){
-            if(isPrime(num)) answer++;
+        numbers = new int[len];
+        char[] arr = number.toCharArray();
+        hset = new HashSet<>();
+        
+        for(int i=0; i<len; i++){
+            numbers[i] = arr[i]-'0';   
         }
         
-        return answer;
+        // 1개만 뽑
+        
+        for(int i=0; i<len+1; i++){
+            dfs(0, i, new int[i], new boolean[len]);
+        }
+
+        System.out.println(hset);
+        return hset.size();
     }
-    public void dfs(String current, String numbers){
-        if(!current.equals("")){
-            hset.add(Integer.parseInt(current));
+    
+    // 1 7 -> 1, 7, 17, 71 만들어야 함
+    public void dfs(int depth, int k, int[] temp, boolean[] visited){
+    
+        if(depth == k){
+      
+            int number = 0;
+            for(int i=0; i<temp.length; i++){
+                number += temp[i] * (int) Math.pow(10, temp.length - i - 1);
+            }
+    
+            // System.out.println(number);
+            if(isPrime(number)) hset.add(number);
+            return;
+            
         }
         
-        for(int i=0; i<numbers.length(); i++){
+        for(int i=0; i<len; i++){
             if(!visited[i]){
-                visited[i]= true;
-                dfs(current+numbers.charAt(i), numbers);
+                visited[i] = true;
+                temp[depth] = numbers[i];
+                dfs(depth+1, k, temp, visited);
                 visited[i] = false;
             }
+          
         }
     }
     
-    boolean isPrime(int n){
-        if(n<=1) return false;
-        for(int i=2; i<=Math.sqrt(n); i++){
-            if(n%i == 0) return false;
+    public boolean isPrime(int number){
+        if(number == 0 || number == 1) return false;
+        for(int i=2; i<number; i++){
+            if(number % i == 0) return false;
         }
         return true;
     }
