@@ -1,48 +1,41 @@
 import java.util.*;
-import java.io.*;
 class Solution {
-    int[] dx = {-1, 1, 0, 0};
-    int[] dy = {0, 0, -1, 1};
-    boolean[][] visited;
+    int[] dx = {-1, 0, 1, 0};
+    int[] dy = {0, 1, 0, -1};
+    int[][] map;
     public int solution(int[][] maps) {
-    
-        int a = maps.length;
-        int b = maps[0].length;
-        visited = new boolean[a][b];
-        
-        int answer = bfs(0, 0, a, b, maps);
-        return answer;
+        int answer = 0;
+        map = maps;
+        // bfs(0,0);
+        return bfs(0,0);
     }
     
-    public int bfs(int startX, int startY, int a, int b, int[][] maps){
+    public int bfs(int x, int y){
         Queue<int[]> q = new LinkedList<>();
-        q.add(new int[]{startX, startY, 0});
-        visited[startX][startY] = true;
+        boolean[][] visited = new boolean[map.length][map[0].length];
+        q.add(new int[]{x, y, 1});
+        visited[x][y] = true;
         
         while(!q.isEmpty()){
-            int[] c = q.poll();
-            int cx = c[0];
-            int cy = c[1];
-            int dist = c[2];
+            int[] curr = q.poll();
+            int cx = curr[0];
+            int cy = curr[1];
+            int dist = curr[2];
             
-            if(cx == a-1 && cy == b-1)
-                return dist+1;
+            if(cx == map.length-1 && cy == map[0].length-1){
+                return dist;
+            }
             
             for(int d=0; d<4; d++){
-                int nx = cx + dx[d];
-                int ny = cy + dy[d];
-                if(inValid(nx, ny, a, b)){
-                    if(maps[nx][ny] == 1){
-                        visited[nx][ny] = true;
-                        q.add(new int[]{nx, ny, dist+1});
-                    }
+                int nx = cx+dx[d];
+                int ny = cy+dy[d];
+                if(0<=nx && nx < map.length && 0<=ny && ny<map[0].length && map[nx][ny] != 0 && !visited[nx][ny]){
+                    q.add(new int[]{nx, ny, dist+1});
+                    visited[nx][ny] = true;
                 }
             }
         }
         return -1;
-    }
-    
-    public boolean inValid(int x, int y, int a, int b){
-        return 0 <= x && x < a && 0 <= y && y < b && (!visited[x][y]);
+        
     }
 }
