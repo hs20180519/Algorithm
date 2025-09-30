@@ -2,31 +2,32 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException{
       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-      int n = Integer.parseInt(br.readLine());
+      int N = Integer.parseInt(br.readLine());
+      int[][] arr = new int[100][100];
+      int answer = 0;
+      
       StringTokenizer st = null;
-      int[][] dohaeji = new int[100][100];
-      for(int k=0; k<n; k++){
+      for(int i=0; i<N; i++){
         st = new StringTokenizer(br.readLine());
-        int x = Integer.parseInt(st.nextToken())-1;
-        int y = Integer.parseInt(st.nextToken())-1;
+        int x = Integer.parseInt(st.nextToken());
+        int y = Integer.parseInt(st.nextToken());
         
-        for(int i=x; i<x+10; i++){
-          for(int j=y; j<y+10; j++){
-            dohaeji[i][j] += 1;
+        for(int j=x; j<x+10; j++){
+          for(int k=y; k<y+10; k++){
+            arr[j][k] += 1;
           }
+        }
+        
+      }
+      
+      for(int i=0; i<100; i++){
+        for(int j=0; j<100; j++){
+          if(arr[i][j] > 0) answer++;
         }
       }
       
-      int answer = 0;
-      for(int i=0; i<100; i++){
-        for(int j=0; j<100; j++){
-          if(dohaeji[i][j] > 1){
-            answer += dohaeji[i][j]-1 ;
-          }
-        }
-      }
-      System.out.println(n*100-answer);
+      System.out.println(answer);
   }
 }
