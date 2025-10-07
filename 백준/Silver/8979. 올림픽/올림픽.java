@@ -8,7 +8,7 @@ public class Main {
       int N = Integer.parseInt(st.nextToken());
       int K = Integer.parseInt(st.nextToken());
       
-      int[][] arr = new int[N+1][4];
+      int[][] arr = new int[N+1][3];
       
       
       for(int i=1; i<=N; i++){
@@ -17,23 +17,23 @@ public class Main {
         int gold = Integer.parseInt(st.nextToken());
         int silver = Integer.parseInt(st.nextToken());
         int bronze = Integer.parseInt(st.nextToken());
-        arr[N][0] = gold;
-        arr[N][1] = silver;
-        arr[N][2] = bronze;
+        arr[country][0] = gold;
+        arr[country][1] = silver;
+        arr[country][2] = bronze;
         
       }
       
-      int rank = 1;
+      int rank = 0;
       for(int i=1; i<=N; i++){
         if(arr[i][0] > arr[K][0]){
           rank++;
-        }else if(arr[i][1] > arr[K][1]){
+        }else if(arr[i][0] == arr[K][0] && arr[i][1] > arr[K][1]){
           rank++;
-        }else if(arr[i][2] > arr[K][2]){
+        }else if(arr[i][0] == arr[K][0] && arr[i][1] == arr[K][1] && arr[i][2] > arr[K][2]){
           rank++;
         }
       }
       
-      System.out.println(rank);
+      System.out.println(rank+1);
     }
   }
