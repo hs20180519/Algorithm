@@ -19,6 +19,13 @@ class Solution {
                 }
             }
         }
+        
+        // for(int i=0; i<land.length; i++){
+        //     for(int j=0; j<4; j++){
+        //         System.out.print(dp[i][j] + " ");
+        //     }
+        //     System.out.println();
+        // }
 
         int answer = 0;
         
