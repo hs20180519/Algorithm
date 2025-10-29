@@ -1,12 +1,8 @@
 -- 코드를 입력하세요
-SELECT P.PRODUCT_ID, P.PRODUCT_NAME, P.PRICE*SUM(O.AMOUNT) AS TOTAL_SALES
-FROM FOOD_ORDER O
-JOIN FOOD_PRODUCT P
-ON O.PRODUCT_ID = P.PRODUCT_ID
-WHERE '2022-05-01' <= O.PRODUCE_DATE AND O.PRODUCE_DATE <= '2022-05-31'
-GROUP BY P.PRODUCT_ID
-ORDER BY P.PRICE*SUM(O.AMOUNT) DESC, P.PRODUCT_ID
--- 22 2500
-
-
-# SELECT * FROM FOOD_ORDER;
+SELECT p.product_id, p.product_name, sum(p.price * o.amount) as TOTAL_SALES
+FROM FOOD_PRODUCT P 
+JOIN FOOD_ORDER o
+on o.product_id = p.product_id
+where year(o.produce_date) = 2022 AND month(o.produce_date) = 5
+group by p.product_id
+order by TOTAL_SALES DESC, p.product_id
