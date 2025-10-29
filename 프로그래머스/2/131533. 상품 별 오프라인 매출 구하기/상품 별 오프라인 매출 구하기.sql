@@ -1,7 +1,12 @@
 -- 코드를 입력하세요
-SELECT p.product_code, p.price * sum(o.sales_amount) as sales
-from product p
-join offline_sale o
-on p.product_id = o.product_id
-group by p.product_code
-order by sales desc, p.product_code asc
+SELECT P.PRODUCT_CODE, P.PRICE * SUM(O.SALES_AMOUNT) AS SALES
+FROM PRODUCT P
+JOIN OFFLINE_SALE O
+ON P.PRODUCT_ID = O.PRODUCT_ID
+GROUP BY P.PRODUCT_CODE
+ORDER BY SALES DESC, P.PRODUCT_CODE
+
+# SELECT *, SUM(PRICE) FROM PRODUCT GROUP BY LEFT(PRODUCT_CODE, 2);
+# -- B 42000(5) 72000(10) 80000(20
+
+# SELECT * FROM OFFLINE_SALE WHERE PRODUCT_ID IN (5, 10, 20);
