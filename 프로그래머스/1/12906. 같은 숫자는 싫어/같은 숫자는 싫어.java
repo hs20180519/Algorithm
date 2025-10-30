@@ -2,19 +2,21 @@ import java.util.*;
 
 public class Solution {
     public int[] solution(int []arr) {
-        Deque<Integer> s = new LinkedList<>();
-        for(int a : arr){
-            if(s.size() >= 1 && s.peekLast() == a){
-                continue;
-            }
-            s.add(a);
-        }
-        
-        int len = s.size();
-        int[] answer = new int[len];
 
-        for(int i=0; i<len; i++){
-            answer[i] = s.pollFirst();
+        Stack<Integer> st = new Stack<>();
+        
+        for(int a: arr){
+            if(!st.isEmpty() && st.peek() == a){
+                continue;
+            }else{
+                st.push(a);
+            }
+        }
+ 
+        int size = st.size();
+        int[] answer = new int[size];
+        for(int i=size-1; i>=0; i--){
+            answer[i] = st.pop();
         }
 
         return answer;
