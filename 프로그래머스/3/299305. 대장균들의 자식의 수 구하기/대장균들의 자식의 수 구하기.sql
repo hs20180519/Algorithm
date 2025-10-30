@@ -1,8 +1,4 @@
 -- 코드를 작성해주세요
-
-SELECT my.ID, COUNT(par.ID) AS CHILD_COUNT
-FROM ECOLI_DATA my
-LEFT JOIN ECOLI_DATA par
-ON par.PARENT_ID = my.ID
-GROUP BY my.ID
-ORDER BY my.ID
+select d1.id, (select count(*) FROM ecoli_data where parent_id = d1.id) as child_count
+from ecoli_data d1
+order by d1.id
