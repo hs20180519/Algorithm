@@ -1,30 +1,26 @@
 import java.util.*;
+
 class Solution {
-    int[] numbers;
-    int target;
-    int n;
-    int answer;
-    public int solution(int[] number, int targe) {
-        answer = 0;
-        numbers = number;
-        target = targe;
-        n = numbers.length;
+    int len;
+    int count;
+    public int solution(int[] numbers, int target) {
+
+        len = numbers.length;
+        count = 0;
         
-        dfs(0, 0);
-        
-        return answer;
+        dfs(0, 0, target, numbers);
+        return count;
     }
-    public void dfs(int depth, int sum){
-   
-        if(depth == n){
+    
+    public void dfs(int depth, int sum, int target, int[] numbers){
+        if(depth == len){
             if(sum == target){
-                answer++;
+                count++;
             }
             return;
         }
         
-      
-        dfs(depth+1, sum + numbers[depth]);
-        dfs(depth+1, sum - numbers[depth]);
+        dfs(depth+1, sum + numbers[depth], target, numbers);
+        dfs(depth+1, sum - numbers[depth], target, numbers);
     }
 }
