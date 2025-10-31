@@ -1,48 +1,41 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
-
+import java.io.*;
+import java.util.*;
 public class Main {
-	// 순열
-	
-	static int N, M;
-	static int[] arr;
-	static StringBuilder sb;
-	static boolean[] visited;
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		sb = new StringBuilder();
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		visited = new boolean[N];
-		arr = new int[N];
-		
-		st = new StringTokenizer(br.readLine());
-		for(int i=0; i<N; i++) {
-			arr[i] = Integer.parseInt(st.nextToken());
-		}
-		Arrays.sort(arr);
-		permute(0, new int [M]);
-		System.out.println(sb);
-	}
-	public static void permute(int cnt, int[] answers) {
-		if(cnt == M) {
-			for(int i=0; i<cnt; i++) {
-				sb.append(answers[i]).append(" ");
-			}
-			sb.append("\n");
-			return;
-		}
-		for(int i=0; i<N; i++) {
-			if(!visited[i]) {
-				answers[cnt] = arr[i];
-				visited[i] = true;
-				permute(cnt+1, answers);
-				visited[i] = false;
-			}	
-		}
-	}
+    public static StringBuilder sb = new StringBuilder();
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+        
+        int[] arr = new int[N];
+        st = new StringTokenizer(br.readLine());
+        for(int i=0; i<N; i++){
+            arr[i] = Integer.parseInt(st.nextToken());
+        }
+        Arrays.sort(arr);
+        
+        dfs(0, N, M, arr, new int[M], new boolean[N]);
+        System.out.println(sb.toString());
+        // 코드를 작성해주세요 
+    }
+    
+    public static void dfs(int depth, int N, int M, int[] arr, int[] temp, boolean[] visited){
+        if(depth == M){
+            for(int i: temp){
+                sb.append(i).append(" ");
+            }
+            sb.append("\n");
+            return;
+        }
+        
+        for(int i=0; i<N; i++){
+            if(!visited[i]){
+                visited[i] = true;
+                temp[depth] = arr[i];
+                dfs(depth+1, N, M, arr, temp, visited);
+                visited[i] = false;
+            }
+        }
+    }
 }
