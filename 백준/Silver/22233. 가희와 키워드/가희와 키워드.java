@@ -14,32 +14,13 @@ public class Main {
             String s = br.readLine();
             set.add(s);
         }
-        // System.out.println(set);
         
         for(int m=0; m<M; m++){
-            String s = br.readLine();
-            StringBuilder sb = new StringBuilder();
-            for(int i=0; i<s.length(); i++){
-                if(s.charAt(i) == ','){
-                    String temp = sb.toString();
-                    // System.out.println(temp);
-                    if(set.contains(temp)){
-                        set.remove(temp);
-                    }
-                    sb = new StringBuilder();
-                }else{
-                    sb.append(s.charAt(i));
-                }
-                
-                if(i == s.length()-1){
-                    String temp = sb.toString();
-                    // System.out.println(temp);
-                    if(set.contains(temp)){
-                        set.remove(temp);
-                    }
-                    
-                }
+            String[] arr = br.readLine().split(",");
+            for(String a : arr){
+                if(set.contains(a)) set.remove(a);
             }
+            
             // System.out.println(set);
             System.out.println(set.size());
         }
