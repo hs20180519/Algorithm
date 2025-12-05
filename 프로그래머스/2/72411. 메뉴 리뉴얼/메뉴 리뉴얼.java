@@ -1,46 +1,49 @@
 import java.util.*;
+
 class Solution {
-    Map<String, Integer> map = new HashMap<>();
-    List<String> result;
+    LinkedList<String> ans = new LinkedList<>();
+    HashMap<String, Integer> hmap;
     public String[] solution(String[] orders, int[] course) {
-       result = new ArrayList<>();
-        
-        for(int c : course) {
-            map = new HashMap<>();
+        for(int c : course){
+            hmap = new HashMap<>();
             for(String order : orders){
                 char[] arr = order.toCharArray();
                 Arrays.sort(arr);
-                combi(arr, 0, "", c);
+                combi(0, "", arr, c);
             }
-
-            // 최대값 찾기
+            
             int max = 0;
-            for(int v : map.values()){
+            for(int v: hmap.values()){
                 max = Math.max(max, v);
             }
-
-            // 조건: 2번 이상 주문된 조합만 결과에 추가
-            if(max >= 2){
-                for(String key : map.keySet()){
-                    if(map.get(key) == max){
-                        result.add(key);
+            
+            if(max >=2){
+                for(String k : hmap.keySet()){
+                    if(hmap.get(k) == max){
+                        ans.add(k);
                     }
                 }
             }
         }
-        Collections.sort(result);
-        return result.toArray(new String[0]);
+        
+        String[] answer = new String[ans.size()];
+        for(int i=0; i<ans.size(); i++){
+            answer[i] = ans.get(i);
+        }
+  
+       // System.out.println(ans);
+        Arrays.sort(answer);
+        
+        return answer;
     }
     
-    public void combi(char[] arr, int start, String path, int target){
-         if(path.length() == target){
-            map.put(path, map.getOrDefault(path, 0) + 1);
+    public void combi(int start, String path, char[] arr, int course){
+        if(path.length() == course){
+            hmap.put(path, hmap.getOrDefault(path, 0) + 1);
             return;
         }
-
-        for(int i = start; i < arr.length; i++){
-            combi(arr, i + 1, path + arr[i], target);
+        for(int i=start; i<arr.length; i++){
+            combi(i+1, path + arr[i], arr, course);
         }
     }
-
 }
