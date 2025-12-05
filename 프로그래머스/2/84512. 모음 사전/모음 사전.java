@@ -1,42 +1,27 @@
 import java.util.*;
-
 class Solution {
-    String moeum = "AEIOU";
-    List<String> arr;
+    int answer;
+    String words;
+    int idx = 0;
     public int solution(String word) {
-        arr = new ArrayList<>();
-        dfs(0, new char[5]);
-        
-        Collections.sort(arr);
-        
-        if(word.equals("A")) return 1;
- 
-        while(word.length() < 5){
-            word += '0';
-        }
-        
-        // System.out.println(arr);
-        for(int i=0; i<arr.size(); i++){
-            if(arr.get(i).equals(word)){
-                return i;
-            }
-        }
-        int answer = 0;
+        String alpabet = "AEIOU";
+        words = word;
+        dfs(0, alpabet, "");
         return answer;
     }
     
-    public void dfs(int depth, char[] temp){
-        arr.add(String.valueOf(temp));
+    public void dfs(int depth, String alpabet, String w){
+        if(w.equals(words)){
+            answer = idx;
+        }
         
         if(depth == 5){
             return;
         }
         
         for(int i=0; i<5; i++){
-            temp[depth] = moeum.charAt(i);
-            dfs(depth+1, temp);
-            temp[depth] = '0';
-            
+            idx++;
+            dfs(depth+1, alpabet, w+alpabet.charAt(i));
         }
     }
 }
