@@ -1,39 +1,25 @@
 import java.util.*;
-
 class Solution {
-    int ans = 0;
+    int n;
+    boolean[] visited; 
+    int answer = -1;
     public int solution(int k, int[][] dungeons) {
-        // 순열
-        // System.out.println(Arrays.toString(dungeons));
-        int n = dungeons.length;
-        perm(0, new int[n], k, dungeons, new boolean[n]);
-        return ans;
+        n = dungeons.length;
+        visited = new boolean[n];
+        dfs(0, k, dungeons);
+        return answer;
     }
     
-    public void perm(int depth, int[] temp, int k, int[][] dungeons, boolean[] visited){
-        if(depth==dungeons.length){ // 다 골랐으면
-            // System.out.println(Arrays.toString(temp));
-            ans = Math.max(ans, calc(k, dungeons, temp));
-            return;
-        }
-        for(int i=0; i<dungeons.length; i++){
-            if(!visited[i]){
+    public void dfs(int depth, int piludo, int[][] dungeons){
+        // System.out.println(piludo);
+        answer = Math.max(depth, answer);
+        
+        for(int i=0; i<n; i++){
+            if(!visited[i] && dungeons[i][0] <= piludo){
                 visited[i] = true;
-                temp[depth] = i;
-                perm(depth+1, temp, k, dungeons, visited);
+                dfs(depth+1, piludo-dungeons[i][1], dungeons);
                 visited[i] = false;
             }
         }
-    }
-    
-    public int calc(int k, int[][] dungeons, int[] temp){
-        int answer = 0;
-        for(int i=0; i<dungeons.length; i++){
-            if(k >= dungeons[temp[i]][0]){
-                k -= dungeons[temp[i]][1];
-                answer++;
-            }
-        }
-        return answer;
     }
 }
